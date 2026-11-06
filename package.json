@@ -1,0 +1,37 @@
+{
+  "name": "autonomous-business-finance",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Industrial-grade autonomous business finance platform",
+  "scripts": {
+    "dev:backend": "npm --prefix backend run start:dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build:backend": "npm --prefix backend run build",
+    "build:frontend": "npm --prefix frontend run build",
+    "build": "npm run build:backend && npm run build:frontend",
+    "lint:backend": "npm --prefix backend run lint",
+    "lint:frontend": "npm --prefix frontend run lint",
+    "lint": "npm run lint:backend && npm run lint:frontend",
+    "format:backend": "npm --prefix backend run format",
+    "format:frontend": "npm --prefix frontend run format",
+    "format": "npm run format:backend && npm run format:frontend",
+    "test:backend": "npm --prefix backend run test",
+    "test": "npm run test:backend",
+    "prisma:generate": "npm --prefix backend run prisma generate",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down"
+  },
+  "keywords": [
+    "finance",
+    "autonomous",
+    "nestjs",
+    "react",
+    "typescript",
+    "prisma",
+    "postgresql",
+    "vite",
+    "tailwind"
+  ],
+  "author": "",
+  "license": "UNLICENSED"
+}
