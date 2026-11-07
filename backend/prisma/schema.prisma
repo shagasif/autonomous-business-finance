@@ -1,5 +1,5 @@
 // Prisma Schema for Autonomous Business Finance Platform
-// Production-ready foundational architecture with PostgreSQL
+// Complete Multi-Agent Financial Architecture with PostgreSQL
 
 generator client {
   provider = "prisma-client-js"
@@ -10,19 +10,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Foundational baseline models for business entity and audit logging
-// Core financial operations will be built in Phase 2
+// -------------------------------------------------------------
+// CORE ORGANIZATIONAL DOMAIN
+// -------------------------------------------------------------
 
 model Organization {
-  id        String     @id @default(uuid())
-  name      String
-  slug      String     @unique
-  currency  String     @default("USD")
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  currency    String   @default("USD")
+  industry    String?  @default("Software & Technology")
+  fiscalYearStart Int  @default(1) // Month 1 = January
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  users     User[]
-  auditLogs AuditLog[]
+  users             User[]
+  auditLogs         AuditLog[]
+  accounts          Account[]
+  transactions      Transaction[]
+  budgets           Budget[]
+  invoices          Invoice[]
+  cashFlowForecasts CashFlowForecast[]
+  anomalies         FinancialAnomaly[]
+  agentTasks        AgentTask[]
+  financialReports  FinancialReport[]
 
   @@map("organizations")
 }
@@ -31,7 +42,7 @@ model User {
   id             String       @id @default(uuid())
   email          String       @unique
   name           String?
-  role           String       @default("MEMBER")
+  role           String       @default("FINANCE_ADMIN") // FINANCE_ADMIN, ANALYST, VIEWER
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   createdAt      DateTime     @default(now())
@@ -47,6 +58,7 @@ model AuditLog {
   entityType     String
   entityId       String?
   details        Json?
+  actor          String       @default("SYSTEM")
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   createdAt      DateTime     @default(now())
@@ -54,4 +66,307 @@ model AuditLog {
   @@index([organizationId])
   @@index([createdAt])
   @@map("audit_logs")
+}
+
+// -------------------------------------------------------------
+// FINANCIAL ACCOUNTING DOMAIN
+// -------------------------------------------------------------
+
+enum AccountType {
+  ASSET
+  LIABILITY
+  EQUITY
+  REVENUE
+  EXPENSE
+}
+
+model Account {
+  id             String        @id @default(uuid())
+  organizationId String
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  code           String        // e.g. "1000", "2000"
+  type           AccountType
+  balance        Float         @default(0.0)
+  currency       String        @default("USD")
+  description    String?
+  isSystem       Boolean       @default(false)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  transactions   Transaction[]
+
+  @@unique([organizationId, code])
+  @@index([organizationId])
+  @@map("accounts")
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+  TRANSFER
+}
+
+enum TransactionStatus {
+  PENDING
+  CLEARED
+  RECONCILED
+}
+
+model Transaction {
+  id             String            @id @default(uuid())
+  organizationId String
+  organization   Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  accountId      String
+  account        Account           @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  amount         Float
+  type           TransactionType
+  category       String            // e.g. "SaaS Subscriptions", "Payroll", "Cloud Infrastructure"
+  counterparty   String            // Vendor or Client name
+  description    String
+  date           DateTime
+  status         TransactionStatus @default(CLEARED)
+  isSimulated    Boolean           @default(false)
+  hasAnomaly     Boolean           @default(false)
+  metadata       Json?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  anomalies      FinancialAnomaly[]
+
+  @@index([organizationId])
+  @@index([accountId])
+  @@index([date])
+  @@index([category])
+  @@map("transactions")
+}
+
+enum BudgetPeriod {
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+enum BudgetStatus {
+  HEALTHY
+  WARNING
+  EXCEEDED
+}
+
+model Budget {
+  id              String       @id @default(uuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  department      String       // e.g. "Engineering", "Marketing", "Operations", "Sales"
+  category        String
+  period          BudgetPeriod @default(MONTHLY)
+  allocatedAmount Float
+  spentAmount     Float        @default(0.0)
+  startDate       DateTime
+  endDate         DateTime
+  status          BudgetStatus @default(HEALTHY)
+  notes           String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([organizationId])
+  @@index([department])
+  @@map("budgets")
+}
+
+enum InvoiceType {
+  RECEIVABLE // Inbound client revenue
+  PAYABLE    // Outbound vendor bill
+}
+
+enum InvoiceStatus {
+  DRAFT
+  PENDING
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+model Invoice {
+  id             String        @id @default(uuid())
+  organizationId String
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  invoiceNumber  String
+  type           InvoiceType
+  counterparty   String
+  amount         Float
+  tax            Float         @default(0.0)
+  totalAmount    Float
+  status         InvoiceStatus @default(PENDING)
+  issueDate      DateTime
+  dueDate        DateTime
+  paidDate       DateTime?
+  items          Json?         // Array of line items: description, qty, unitPrice
+  notes          String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@unique([organizationId, invoiceNumber])
+  @@index([organizationId])
+  @@index([dueDate])
+  @@index([status])
+  @@map("invoices")
+}
+
+model CashFlowForecast {
+  id                     String       @id @default(uuid())
+  organizationId         String
+  organization           Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  forecastDate           DateTime     @default(now())
+  periodDays             Int          // 30, 60, 90
+  projectedInflow        Float
+  projectedOutflow       Float
+  netCashFlow            Float
+  closingCashBalance     Float
+  projectedRunwayMonths  Float
+  confidenceScore        Float        // 0.0 - 1.0
+  breakdown              Json?        // Detailed daily or weekly trend predictions
+  riskFactors            String[]
+  createdAt              DateTime     @default(now())
+
+  @@index([organizationId])
+  @@index([forecastDate])
+  @@map("cash_flow_forecasts")
+}
+
+enum AnomalySeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum AnomalyStatus {
+  DETECTED
+  ACKNOWLEDGED
+  RESOLVED
+  FALSE_POSITIVE
+}
+
+model FinancialAnomaly {
+  id             String          @id @default(uuid())
+  organizationId String
+  organization   Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  transactionId  String?
+  transaction    Transaction?    @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+  severity       AnomalySeverity
+  category       String
+  title          String
+  description    String
+  expectedValue  Float?
+  actualValue    Float?
+  zScore         Float?
+  status         AnomalyStatus   @default(DETECTED)
+  resolutionNote String?
+  detectedBy     String          @default("Expense Management Agent")
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([organizationId])
+  @@index([severity])
+  @@index([status])
+  @@map("financial_anomalies")
+}
+
+// -------------------------------------------------------------
+// MULTI-AGENT ORCHESTRATION & AUDITING DOMAIN
+// -------------------------------------------------------------
+
+enum AgentType {
+  FINANCIAL_ANALYST
+  EXPENSE_MANAGEMENT
+  CASH_FLOW_MANAGEMENT
+  BUDGET_PLANNING
+  FINANCIAL_REPORTING
+  AI_FINANCE_ASSISTANT
+  ORCHESTRATOR
+}
+
+enum TaskStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  REQUIRES_APPROVAL
+  CANCELLED
+}
+
+model AgentTask {
+  id               String              @id @default(uuid())
+  organizationId   String
+  organization     Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  agentType        AgentType
+  intent           String
+  userPrompt       String
+  status           TaskStatus          @default(PENDING)
+  inputPayload     Json?
+  outputPayload    Json?
+  reasoningSteps   String[]            // Step-by-step reasoning narrative
+  requiresApproval Boolean             @default(false)
+  isApproved       Boolean?            // null = pending, true = approved, false = rejected
+  approvedBy       String?
+  approvalAction   String?             // e.g. "AUTHORIZE_REALLOCATION", "EXECUTE_VENDOR_PAYMENT"
+  sandboxed        Boolean             @default(true)
+  hooksTriggered   String[]            // List of hooks that executed
+  executionTimeMs  Int                 @default(0)
+  errorMessage     String?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  logs             AgentExecutionLog[]
+
+  @@index([organizationId])
+  @@index([agentType])
+  @@index([status])
+  @@index([createdAt])
+  @@map("agent_tasks")
+}
+
+model AgentExecutionLog {
+  id              String       @id @default(uuid())
+  taskId          String
+  task            AgentTask    @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  agentType       AgentType
+  stepName        String
+  status          String       // STARTED, SUCCESS, WARNING, FAILED
+  message         String
+  payloadSnapshot Json?
+  executionTimeMs Int          @default(0)
+  createdAt       DateTime     @default(now())
+
+  @@index([taskId])
+  @@index([createdAt])
+  @@map("agent_execution_logs")
+}
+
+enum ReportType {
+  PROFIT_AND_LOSS
+  BALANCE_SHEET
+  CASH_FLOW_STATEMENT
+  EXECUTIVE_KPI_SUMMARY
+}
+
+model FinancialReport {
+  id             String       @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  reportType     ReportType
+  title          String
+  period         String       // e.g. "Q3 2026", "October 2026", "FY2026"
+  startDate      DateTime
+  endDate        DateTime
+  summaryMetrics Json         // Structured revenue, expense, net margin, cash
+  sections       Json         // Detailed line items and tables
+  generatedBy    String       @default("Financial Reporting Agent")
+  isVerified     Boolean      @default(true) // Post-execution hook verified
+  createdAt      DateTime     @default(now())
+
+  @@index([organizationId])
+  @@index([reportType])
+  @@map("financial_reports")
 }

@@ -9,183 +9,116 @@
 [![Prisma](https://img.shields.io/badge/Prisma_ORM-6.19-2D3748?logo=prisma&logoColor=white)](https://www.prisma.io/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 
-An industrial-grade, browser-based autonomous business finance platform engineered for resilience, multi-tenant security, and automated financial operations.
-
-> **Phase 1 Status**: Project Architecture & Development Environment Initialized. Core financial operations and autonomous agents are deferred to Phase 2.
+An industrial-grade, browser-based autonomous business finance platform engineered to operate like an intelligent AI-powered corporate finance department.
 
 ---
 
-## Architecture Overview
+## Capabilities & Architecture
 
-The system is decoupled into two primary applications with clean boundary separation:
-1. **Frontend (`frontend/`)**: React 19, TypeScript, Vite, Tailwind CSS with responsive enterprise UI layout and resilient API communication.
-2. **Backend (`backend/`)**: NestJS 12, TypeScript, modular REST API, global exception handling, request logging, and health diagnostics.
-3. **Database Layer**: PostgreSQL managed via Prisma ORM 6 with schema models for organizations, multi-tenant users, and audit logs.
+### 1. Coordinated 6-Agent AI Architecture
+- **Agent 1: Financial Analyst** — Analyzes ARR/MRR growth, EBITDA, gross margins, and strategic expansion opportunities.
+- **Agent 2: Expense Management Agent** — Categorizes transactions, tracks spend velocity, detects anomalies (z-score > 2.5), and recommends cost optimizations.
+- **Agent 3: Cash Flow Management Agent** — Projects 30/60/90-day cash flow trajectories, monitors runway, computes liquidity ratios (Current Ratio, Quick Ratio, DSO, DPO), and flags liquidity shortages.
+- **Agent 4: Budget Planning Agent** — Monitors departmental budget utilization, computes variance analysis, and proposes autonomous reallocations.
+- **Agent 5: Financial Reporting Agent** — Generates audited Profit & Loss statements and Balance Sheets, verifying accounting invariants (`Assets = Liabilities + Equity`).
+- **Agent 6: AI Finance Assistant** — Central conversational interface that parses natural-language executive queries, delegates tasks across specialized agents, and synthesizes unified briefings with reasoning transparency.
 
-```
-autonomous-business-finance/
-├── .gitignore               # Root Git exclusion rules
-├── README.md                # System documentation
-├── docker-compose.yml       # PostgreSQL 16 container definition
-├── package.json             # Root orchestration scripts
-├── docs/                    # Architectural specs and guides
-│   ├── architecture.md      # Detailed system architecture specification
-│   └── setup-guide.md       # Onboarding and environment setup guide
-├── frontend/                # React 19 + TypeScript + Vite + Tailwind CSS
-│   ├── .env.example         # Frontend environment template
-│   ├── eslint.config.js     # ESLint configuration
-│   ├── tailwind.config.js   # Tailwind theme settings
-│   ├── vite.config.ts       # Vite proxy & server config
-│   └── src/                 # Components, services, types
-└── backend/                 # NestJS 12 + TypeScript + Prisma ORM
-    ├── .env.example         # Backend environment template
-    ├── prisma/schema.prisma # PostgreSQL relational schema
-    └── src/                 # Modules, filters, config, health probe
-```
+### 2. Week 7 Engineering Framework
+- **Sandboxing (`agent-sandbox.ts`)**: Isolates agent execution, enforces operation whitelists, applies execution timeouts, and scopes data access.
+- **Pre-Execution Hook (`agent-hooks.ts`)**: Validates input bounds, multi-tenant boundaries, and non-negative amounts.
+- **Post-Execution Hook**: Verifies mathematical invariants (e.g. Net Income = Revenue - Expenses, non-negative runway, balanced balance sheet).
+- **Security Approval Hook**: Quarantines high-risk operations (budget reallocations, payments, contract cancellations) into a Human-in-the-Loop CFO approval queue.
+- **Audit Logging Hook**: Maintains an immutable audit trail in PostgreSQL (`agent_execution_logs` & `audit_logs`).
+
+### 3. Central Financial Ledger & PostgreSQL Schema
+- **Accounts**: Operating Checking, Treasury Reserve, Accounts Receivable, Accounts Payable.
+- **Transactions**: Full ledger with automated category classification, simulated data tags, and anomaly flags.
+- **Budgets**: Departmental monthly caps, spent amounts, and computed variance status (`HEALTHY`, `WARNING`, `EXCEEDED`).
+- **Invoices**: Inbound client receivables and outbound vendor payables with aging schedules and payment status.
+- **Anomalies**: Outlier detection records with severity ratings and resolution triage states.
 
 ---
 
 ## Quick Start
 
-### 1. Prerequisites
-- **Node.js** (v20+ or v24 LTS recommended)
-- **npm** (v10+)
-- **Git**
-- **Docker** (optional, for local PostgreSQL container)
-
-### 2. Configure Environment Variables
-
-```bash
-# Backend environment setup
-cp backend/.env.example backend/.env
-
-# Frontend environment setup
-cp frontend/.env.example frontend/.env
-```
-
-### 3. (Optional) Start PostgreSQL Database with Docker
-
+### 1. Start PostgreSQL with Docker
+From the project root:
 ```bash
 docker compose up -d
 ```
-*Alternatively, configure your local PostgreSQL database credentials in `backend/.env`.*
+*(PostgreSQL 16 boots on port 5432 with health check).*
 
-### 4. Install Dependencies & Generate Prisma Client
-
+### 2. Configure Environment Variables
 ```bash
-# Backend dependencies and Prisma client
+# Backend configuration
+cp backend/.env.example backend/.env
+
+# Frontend configuration
+cp frontend/.env.example frontend/.env
+```
+
+### 3. Synchronize Schema & Seed Realistic Data
+```bash
 cd backend
 npm install
-npx prisma generate
-cd ..
-
-# Frontend dependencies
-cd frontend
-npm install
+npx prisma db push
+npm run seed
 cd ..
 ```
 
----
+### 4. Run the Platform
 
-## Running the Applications
-
-### Option A: From Project Root (Unified Scripts)
-
+#### Option A: Root Unified Scripts
 ```bash
-# Start backend server (port 3001)
+# Terminal 1 - Backend (port 3001)
 npm run dev:backend
 
-# Start frontend development server (port 5173, in a separate terminal)
+# Terminal 2 - Frontend (port 5173)
 npm run dev:frontend
 ```
 
-### Option B: Running Individually
-
-#### Backend
+#### Option B: Individual App Startup
 ```bash
-cd backend
-npm run start:dev
-```
-- Server URL: `http://localhost:3001`
-- Health Check: `http://localhost:3001/api/health`
+# Backend
+cd backend && npm run start:dev
 
-#### Frontend
-```bash
-cd frontend
-npm run dev
-```
-- Client URL: `http://localhost:5173`
-
----
-
-## Health Check API Contract
-
-### `GET /api/health`
-
-Returns live telemetry of the backend service, PostgreSQL connectivity, node runtime, memory usage, and uptime.
-
-#### Sample Response:
-```json
-{
-  "status": "ok",
-  "service": "autonomous-business-finance-api",
-  "version": "0.1.0",
-  "timestamp": "2026-11-06T18:15:15.636Z",
-  "uptimeSeconds": 42,
-  "environment": "development",
-  "database": {
-    "status": "connected",
-    "latencyMs": 4
-  },
-  "system": {
-    "memoryUsageMb": {
-      "rss": 93,
-      "heapTotal": 38,
-      "heapUsed": 32
-    },
-    "nodeVersion": "v24.20.0",
-    "platform": "win32"
-  }
-}
+# Frontend
+cd frontend && npm run dev
 ```
 
-*Note: If PostgreSQL is disconnected, the server gracefully returns `"status": "degraded"` with database error details without crashing.*
+Open your browser to `http://localhost:5173`.
 
 ---
 
 ## Quality Assurance & Verification
 
-### Frontend Quality Checks
+From project root:
 ```bash
-cd frontend
-npm run lint         # ESLint validation (0 errors, 0 warnings)
-npm run format       # Prettier code formatting
-npm run build        # Typecheck and production bundle build
-```
-
-### Backend Quality Checks
-```bash
-cd backend
-npm run lint         # TypeScript linter (0 errors, 0 warnings)
-npm run format       # Prettier formatting
-npm test             # Vitest unit test suite (100% pass)
-npm run build        # NestJS compiler build
+npm run lint         # Runs Oxlint (backend) and ESLint (frontend) -> 0 errors
+npm run test         # Runs Vitest unit tests -> 4 suites, 7 tests passed (100%)
+npm run build        # Compiles NestJS backend and Vite frontend -> 0 errors
 ```
 
 ---
 
-## Security & Secrets Policy
-- **Zero Hardcoded Credentials**: All ports, database URLs, and environment variables are strictly sourced via `.env`.
-- **CORS Protection**: Access to backend REST endpoints is restricted to configured origins.
-- **Git Protection**: Sensitive `.env` files and certificates are excluded across all `.gitignore` layers.
+## API Reference
 
----
-
-## Phase Roadmap
-
-| Phase | Description | Status |
+| Endpoint | Method | Description |
 | :--- | :--- | :--- |
-| **Phase 1** | Project Architecture, Dual-App Scaffolding, Prisma ORM, Diagnostics | **Completed** |
-| **Phase 2** | Chart of Accounts, General Ledger, Multi-Currency, Invoicing, Banking | Next |
-| **Phase 3** | Autonomous AI Agents, Reconciliation Engine, Cash Flow Anomaly Detection | Planned |
-| **Phase 4** | Autonomous Financial Reporting, Compliance Audits, ERP Connectors | Planned |
+| `GET /api/health` | GET | Diagnostic health probe (database latency, runtime, memory heap) |
+| `GET /api/finance/overview` | GET | Executive financial metrics (Revenue, Expenses, Margin, Runway, Cash) |
+| `GET /api/finance/transactions` | GET | Transaction ledger with category & anomaly filters |
+| `POST /api/finance/transactions` | POST | Ingest transaction with automated classification & anomaly check |
+| `GET /api/finance/budgets` | GET | Departmental budget variance and utilization |
+| `GET /api/finance/invoices` | GET | Accounts Receivable & Accounts Payable ledger |
+| `GET /api/finance/anomalies` | GET | Active detected financial anomalies |
+| `PATCH /api/finance/anomalies/:id`| PATCH | Acknowledge or resolve an anomaly |
+| `GET /api/finance/cash-flow/forecast` | GET | 30, 60, 90-day time-series cash flow projections |
+| `GET /api/finance/reports` | GET | Audited financial statements (P&L, Balance Sheet) |
+| `POST /api/finance/simulate-anomaly` | POST | Trigger demo $18,400 compute spike anomaly |
+| `POST /api/agents/chat` | POST | Conversational AI assistant multi-agent dispatch |
+| `GET /api/agents/status` | GET | Real-time status, latency, and throughput of all 6 agents |
+| `GET /api/agents/tasks` | GET | Multi-agent execution logs and reasoning history |
+| `POST /api/agents/tasks/:id/approve` | POST | Human CFO authorization of quarantined action |
+| `POST /api/agents/tasks/:id/reject` | POST | Human CFO rejection of quarantined action |
+| `POST /api/agents/run/:agentType` | POST | Direct trigger of a specialized agent |
