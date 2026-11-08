@@ -164,14 +164,14 @@ export const RevenueExpenseAnalytics: React.FC<Props> = ({ metrics, onSimulateAn
               className="chart-line"
               d={linePath(revenuePoints)}
               fill="none"
-              stroke="#D6AD72"
+              stroke="var(--accent)"
               strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
             {monthlyData.map((d, index) => (
               <g key={d.month}>
-                {[{ label: 'Revenue', point: revenuePoints[index], value: d.revenue, color: '#D6AD72' },
+                {[{ label: 'Revenue', point: revenuePoints[index], value: d.revenue, color: 'var(--accent)' },
                   { label: 'Operational Expenses', point: expensePoints[index], value: d.expenses, color: '#C4C7CC' }].map(
                   ({ label, point, value, color }) => (
                     <g key={label}>

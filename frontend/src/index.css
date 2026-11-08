@@ -15,43 +15,43 @@
 
 :root {
   /* — Light Mode — */
-  --bg-main: #F0F1F3;
-  --bg-sidebar: #ECEEF2;
-  --bg-card: #F7F7F5;
-  --bg-secondary: #F0F1F4;
-  --bg-modal: #F7F7F5;
+  --bg-main: #F3EDF3;
+  --bg-sidebar: #EEE7EF;
+  --bg-card: #FBF8FC;
+  --bg-secondary: #F0E9F1;
+  --bg-modal: #FBF8FC;
   --bg-input: #FFFFFF;
-  --bg-hover: #E8EAED;
-  --bg-overlay: rgba(8, 11, 18, 0.68);
+  --bg-hover: #EAE0EB;
+  --bg-overlay: rgba(11, 9, 13, 0.68);
 
-  /* Primary buttons use a solid champagne accent. */
-  --btn-primary-bg: #D6AD72;
-  --btn-primary-hover: #C49B65;
-  --btn-primary-text: #17130E;
+  /* Soft mauve brings the brand accent into light mode. */
+  --btn-primary-bg: #D99ACB;
+  --btn-primary-hover: #C985B7;
+  --btn-primary-text: #1B111B;
 
-  /* Accent Elements: Radiant Champagne Gold */
-  --accent: #D6AD72;
-  --accent-hover: #C49B65;
-  --accent-light: #F1EDE5;
-  --accent-muted: rgba(214, 173, 114, 0.16);
-  --accent-border: rgba(177, 133, 77, 0.42);
-  --accent-highlight: linear-gradient(135deg, rgba(214, 173, 114, 0.22), rgba(214, 173, 114, 0.08));
-  --surface-edge: rgba(8, 11, 18, 0.08);
+  /* Brand accents use mauve over luminous pearl surfaces. */
+  --accent: #D99ACB;
+  --accent-hover: #C985B7;
+  --accent-light: #F3D9EE;
+  --accent-muted: rgba(217, 154, 203, 0.16);
+  --accent-border: rgba(184, 121, 168, 0.42);
+  --accent-highlight: linear-gradient(135deg, rgba(217, 154, 203, 0.22), rgba(217, 154, 203, 0.08));
+  --surface-edge: rgba(11, 9, 13, 0.08);
 
   /* Secondary */
-  --secondary: #686B72;
+  --secondary: #68616B;
 
-  /* Borders: quiet charcoal with warm metallic interaction */
-  --border: #E5E5E2;
-  --border-card: #E5E5E2;
-  --border-hover: #C49B65;
+  /* Borders stay subtle while interactions use the brand mauve. */
+  --border: #E6DDE8;
+  --border-card: #E6DDE8;
+  --border-hover: #B879A8;
 
   /* Typography */
-  --text-primary: #20242B;
-  --text-secondary: #626873;
-  --text-muted: #626873;
-  --text-on-accent: #17130E;
-  --accent-text: #806039;
+  --text-primary: #1B111B;
+  --text-secondary: #62596A;
+  --text-muted: #6B6470;
+  --text-on-accent: #1B111B;
+  --accent-text: #80516F;
   --success-text: #47743E;
   --danger-text: #A34444;
   --warning-text: #75641D;
