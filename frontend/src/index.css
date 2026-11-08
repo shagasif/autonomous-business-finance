@@ -2,15 +2,326 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Autonomous Finance - Brand Visual Identity
+ *
+ * Obsidian Black: #080B12
+ * Radiant Champagne Gold: #D6AD72
+ * Platinum Silver: #C4C7CC
+ * Luminous Pearl: #F1EDE5
+ *
+ * Supporting surfaces use neutral tints of Obsidian Black and Luminous Pearl.
+ */
+
 :root {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  color-scheme: light dark;
+  /* — Light Mode — */
+  --bg-main: #F0F1F3;
+  --bg-sidebar: #ECEEF2;
+  --bg-card: #F7F7F5;
+  --bg-secondary: #F0F1F4;
+  --bg-modal: #F7F7F5;
+  --bg-input: #FFFFFF;
+  --bg-hover: #E8EAED;
+  --bg-overlay: rgba(8, 11, 18, 0.68);
+
+  /* Primary buttons use a solid champagne accent. */
+  --btn-primary-bg: #D6AD72;
+  --btn-primary-hover: #C49B65;
+  --btn-primary-text: #17130E;
+
+  /* Accent Elements: Radiant Champagne Gold */
+  --accent: #D6AD72;
+  --accent-hover: #C49B65;
+  --accent-light: #F1EDE5;
+  --accent-muted: rgba(214, 173, 114, 0.16);
+  --accent-border: rgba(177, 133, 77, 0.42);
+  --accent-highlight: linear-gradient(135deg, rgba(214, 173, 114, 0.22), rgba(214, 173, 114, 0.08));
+  --surface-edge: rgba(8, 11, 18, 0.08);
+
+  /* Secondary */
+  --secondary: #686B72;
+
+  /* Borders: quiet charcoal with warm metallic interaction */
+  --border: #E5E5E2;
+  --border-card: #E5E5E2;
+  --border-hover: #C49B65;
+
+  /* Typography */
+  --text-primary: #20242B;
+  --text-secondary: #626873;
+  --text-muted: #626873;
+  --text-on-accent: #17130E;
+  --accent-text: #806039;
+  --success-text: #47743E;
+  --danger-text: #A34444;
+  --warning-text: #75641D;
+  --info-text: #167276;
+
+  /* Semantic status colors are reserved for meaningful states. */
+  --success: #72A86B;
+  --success-muted: rgba(114, 168, 107, 0.12);
+  --success-border: rgba(114, 168, 107, 0.3);
+  --danger: #D96B6B;
+  --danger-muted: rgba(217, 107, 107, 0.1);
+  --danger-border: rgba(217, 107, 107, 0.3);
+  --warning: #D8C66A;
+  --warning-muted: rgba(216, 198, 106, 0.15);
+  --warning-border: rgba(216, 198, 106, 0.4);
+  --info: #22B0B5;
+  --info-muted: rgba(34, 176, 181, 0.12);
+  --info-border: rgba(34, 176, 181, 0.3);
+
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color-scheme: light;
+}
+
+.dark {
+  /* — Dark Mode — */
+  --bg-main: #080B12;
+  --bg-sidebar: #0A0D14;
+  --bg-card: #141923;
+  --bg-secondary: #1B202B;
+  --bg-modal: #141923;
+  --bg-input: #10141D;
+  --bg-hover: #202630;
+  --bg-overlay: rgba(8, 11, 18, 0.88);
+
+  --btn-primary-bg: #D6AD72;
+  --btn-primary-hover: #C49B65;
+  --btn-primary-text: #17130E;
+
+  --accent: #D6AD72;
+  --accent-hover: #C49B65;
+  --accent-light: #F1EDE5;
+  --accent-muted: rgba(214, 173, 114, 0.14);
+  --accent-border: rgba(214, 173, 114, 0.38);
+  --accent-highlight: linear-gradient(135deg, rgba(214, 173, 114, 0.2), rgba(214, 173, 114, 0.07));
+  --surface-edge: rgba(241, 237, 229, 0.045);
+
+  --secondary: #C4C7CC;
+
+  --border: #303642;
+  --border-card: #343A46;
+  --border-hover: #B68D58;
+
+  /* Typography */
+  --text-primary: #F1EDE5;
+  --text-secondary: #C4C7CC;
+  --text-muted: #A6ABB4;
+  --text-on-accent: #17130E;
+
+  --success: #72A86B;
+  --success-muted: rgba(114, 168, 107, 0.18);
+  --success-border: rgba(114, 168, 107, 0.48);
+  --danger: #D96B6B;
+  --danger-muted: rgba(217, 107, 107, 0.18);
+  --danger-border: rgba(217, 107, 107, 0.48);
+  --warning: #D8C66A;
+  --warning-muted: rgba(216, 198, 106, 0.18);
+  --warning-border: rgba(216, 198, 106, 0.48);
+  --info: #22B0B5;
+  --info-muted: rgba(34, 176, 181, 0.18);
+  --info-border: rgba(34, 176, 181, 0.48);
+
+  color-scheme: dark;
+}
+
+html:not(.dark) [style*="color: var(--accent)"] {
+  color: var(--accent-text) !important;
+}
+
+html:not(.dark) [style*="color: var(--success)"] {
+  color: var(--success-text) !important;
+}
+
+html:not(.dark) [style*="color: var(--danger)"] {
+  color: var(--danger-text) !important;
+}
+
+html:not(.dark) [style*="color: var(--warning)"] {
+  color: var(--warning-text) !important;
+}
+
+html:not(.dark) [style*="color: var(--info)"] {
+  color: var(--info-text) !important;
+}
+
+html:not(.dark) .text-success {
+  color: var(--success-text) !important;
+}
+
+html:not(.dark) .text-danger,
+html:not(.dark) [class~="text-danger/70"],
+html:not(.dark) [class*="text-[var(--danger)]"] {
+  color: var(--danger-text) !important;
+}
+
+html:not(.dark) .text-warning,
+html:not(.dark) [class*="text-[var(--warning)]"] {
+  color: var(--warning-text) !important;
+}
+
+html:not(.dark) .text-info {
+  color: var(--info-text) !important;
+}
+
+html:not(.dark) input::placeholder,
+html:not(.dark) textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: #0b0f19;
-  color: #f3f4f6;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+@keyframes dashboard-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes chart-line-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes financial-figure-in {
+  from {
+    opacity: 0.55;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#root > .min-h-screen {
+  animation: dashboard-fade-in 420ms ease-out both;
+  background-image:
+    radial-gradient(ellipse 30rem 24rem at 4% 12%, rgba(214, 173, 114, 0.055), transparent 72%),
+    radial-gradient(ellipse 34rem 28rem at 96% 32%, rgba(196, 199, 204, 0.045), transparent 74%),
+    radial-gradient(ellipse 28rem 24rem at 52% 96%, rgba(214, 173, 114, 0.035), transparent 76%);
+}
+
+/* Soft edge lighting keeps dark cards distinct without a heavy shadow. */
+.rounded-2xl.border {
+  box-shadow: inset 0 1px 0 var(--surface-edge);
+}
+
+/* Light translucency and blur add depth while keeping card text legible. */
+.rounded-2xl.border:not(button),
+.rounded-xl.border:not(button) {
+  background-color: color-mix(in srgb, var(--bg-card) 94%, transparent) !important;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    background-color 220ms ease;
+}
+
+.rounded-2xl.border:not(button):hover,
+.rounded-xl.border:not(button):hover {
+  transform: translateY(-3px);
+  border-color: var(--border-hover);
+  box-shadow:
+    inset 0 1px 0 var(--surface-edge),
+    0 0 0 1px color-mix(in srgb, var(--accent) 18%, transparent),
+    0 5px 16px color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+button:not(:disabled) {
+  transition:
+    transform 150ms ease,
+    filter 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+button:not(:disabled):hover {
+  filter: brightness(1.035);
+  transform: scale(1.02);
+}
+
+button:not(:disabled):active {
+  transform: scale(0.99);
+}
+
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.rounded-xl.border.agent-trigger-button:hover {
+  background-color: var(--accent-muted);
+  border-color: var(--accent);
+  box-shadow: none;
+  filter: none;
+  transform: scale(1.02);
+}
+
+.chart-line {
+  stroke-dasharray: 1200;
+  stroke-dashoffset: 1200;
+  animation: chart-line-draw 1.1s ease-out forwards;
+}
+
+.financial-figure {
+  animation: financial-figure-in 700ms ease-out both;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .rounded-2xl.border:not(button):hover,
+  .rounded-xl.border:not(button):hover,
+  button:not(:disabled):active {
+    transform: none;
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-hover);
+}
+
+/* Hide scrollbar for nav tabs */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

@@ -38,10 +38,16 @@ export const ArchitectureOverview: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Tech Stack Card */}
-      <div className="lg:col-span-1 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+      <div
+        className="lg:col-span-1 rounded-2xl p-6 shadow-sm border flex flex-col justify-between"
+        style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
+      >
         <div>
-          <div className="flex items-center gap-2 text-white font-semibold text-lg pb-4 border-b border-slate-800">
-            <Code2 className="w-5 h-5 text-emerald-400" />
+          <div
+            className="flex items-center gap-2 font-semibold text-lg pb-4 border-b"
+            style={{ color: 'var(--text-primary)', borderColor: 'var(--border)' }}
+          >
+            <Code2 className="w-5 h-5" style={{ color: 'var(--accent)' }} />
             <span>Industrial Tech Stack</span>
           </div>
 
@@ -49,13 +55,25 @@ export const ArchitectureOverview: React.FC = () => {
             {stack.map((item) => (
               <div
                 key={item.name}
-                className="p-3 rounded-xl bg-slate-800/40 border border-slate-800/80 flex items-center justify-between"
+                className="p-3 rounded-xl border flex items-center justify-between"
+                style={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border)' }}
               >
                 <div>
-                  <div className="text-sm font-medium text-slate-200">{item.name}</div>
-                  <div className="text-xs text-slate-400">{item.role}</div>
+                  <div className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
+                    {item.name}
+                  </div>
+                  <div className="text-xs" style={{ color: 'var(--text-muted)' }}>
+                    {item.role}
+                  </div>
                 </div>
-                <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700/60">
+                <span
+                  className="text-[10px] font-mono uppercase px-2 py-0.5 rounded border"
+                  style={{
+                    backgroundColor: 'var(--bg-card)',
+                    color: 'var(--text-muted)',
+                    borderColor: 'var(--border)',
+                  }}
+                >
                   {item.category}
                 </span>
               </div>
@@ -63,20 +81,36 @@ export const ArchitectureOverview: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-6 pt-4 border-t border-slate-800 flex items-center gap-2 text-xs text-slate-400">
-          <ShieldCheck className="w-4 h-4 text-emerald-400" />
+        <div
+          className="mt-6 pt-4 border-t flex items-center gap-2 text-xs"
+          style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
+        >
+          <ShieldCheck className="w-4 h-4" style={{ color: 'var(--accent)' }} />
           <span>Zero hardcoded secrets. Environment variable isolated.</span>
         </div>
       </div>
 
       {/* Roadmap & Architectural Scoping Card */}
-      <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-          <div className="flex items-center gap-2 text-white font-semibold text-lg">
-            <Layers className="w-5 h-5 text-teal-400" />
+      <div
+        className="lg:col-span-2 rounded-2xl p-6 shadow-sm border"
+        style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
+      >
+        <div
+          className="flex items-center justify-between pb-4 border-b"
+          style={{ borderColor: 'var(--border)' }}
+        >
+          <div className="flex items-center gap-2 font-semibold text-lg" style={{ color: 'var(--text-primary)' }}>
+            <Layers className="w-5 h-5" style={{ color: 'var(--accent)' }} />
             <span>Platform Lifecycle Roadmap</span>
           </div>
-          <span className="text-xs font-mono bg-teal-500/10 text-teal-400 border border-teal-500/20 px-2.5 py-0.5 rounded-full">
+          <span
+            className="text-xs font-mono border px-2.5 py-0.5 rounded-full"
+            style={{
+              backgroundColor: 'var(--accent-muted)',
+              color: 'var(--accent)',
+              borderColor: 'var(--accent-border)',
+            }}
+          >
             Phase 1 Scoped
           </span>
         </div>
@@ -85,54 +119,82 @@ export const ArchitectureOverview: React.FC = () => {
           {phases.map((phase) => (
             <div
               key={phase.id}
-              className={`p-4 rounded-xl border transition-all ${
+              className="p-4 rounded-xl border transition-all"
+              style={
                 phase.status === 'completed'
-                  ? 'bg-slate-800/50 border-emerald-500/30'
-                  : 'bg-slate-950/40 border-slate-800/80 opacity-70'
-              }`}
+                  ? {
+                      backgroundColor: 'var(--accent-muted)',
+                      borderColor: 'var(--accent-border)',
+                    }
+                  : {
+                      backgroundColor: 'var(--bg-secondary)',
+                      borderColor: 'var(--border)',
+                      opacity: 0.7,
+                    }
+              }
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-2.5">
                   {phase.status === 'completed' ? (
-                    <div className="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                    <div
+                      className="w-6 h-6 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: 'var(--accent-muted)', color: 'var(--accent)' }}
+                    >
                       <CheckCircle2 className="w-4 h-4" />
                     </div>
                   ) : (
-                    <div className="w-6 h-6 rounded-full bg-slate-800 text-slate-500 flex items-center justify-center">
+                    <div
+                      className="w-6 h-6 rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: 'var(--bg-card)', color: 'var(--text-muted)' }}
+                    >
                       <Lock className="w-3.5 h-3.5" />
                     </div>
                   )}
                   <div>
-                    <span className="text-xs font-mono font-medium text-emerald-400 block">
+                    <span className="text-xs font-mono font-medium block" style={{ color: 'var(--accent)' }}>
                       {phase.id}
                     </span>
-                    <h3 className="text-sm font-semibold text-white">{phase.title}</h3>
+                    <h3 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                      {phase.title}
+                    </h3>
                   </div>
                 </div>
 
                 <span
-                  className={`text-[11px] font-mono uppercase px-2 py-0.5 rounded-full ${
+                  className="text-[11px] font-mono uppercase px-2 py-0.5 rounded-full border"
+                  style={
                     phase.status === 'completed'
-                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                      : 'bg-slate-800 text-slate-400 border border-slate-700/60'
-                  }`}
+                      ? {
+                          backgroundColor: 'var(--accent-muted)',
+                          color: 'var(--accent)',
+                          borderColor: 'var(--accent-border)',
+                        }
+                      : {
+                          backgroundColor: 'var(--bg-card)',
+                          color: 'var(--text-muted)',
+                          borderColor: 'var(--border)',
+                        }
+                  }
                 >
                   {phase.status === 'completed' ? 'Active / Initialized' : 'Phase 2+'}
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-2.5 ml-8 leading-relaxed">
+              <p className="text-xs mt-2.5 ml-8 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
                 {phase.description}
               </p>
             </div>
           ))}
         </div>
 
-        <div className="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+        <div
+          className="mt-6 pt-4 border-t flex items-center justify-between text-xs"
+          style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
+        >
           <div className="flex items-center gap-2">
-            <Database className="w-4 h-4 text-emerald-400" />
-            <span>PostgreSQL Prisma schema & migration pipeline ready</span>
+            <Database className="w-4 h-4" style={{ color: 'var(--accent)' }} />
+            <span>PostgreSQL Prisma schema &amp; migration pipeline ready</span>
           </div>
-          <div className="flex items-center gap-1 font-mono text-emerald-400">
+          <div className="flex items-center gap-1 font-mono" style={{ color: 'var(--accent)' }}>
             <span>Ready for Phase 2</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </div>

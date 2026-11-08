@@ -31,25 +31,40 @@ export const MultiAgentControlCenter: React.FC<Props> = ({
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
+      <div
+        className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b gap-3"
+        style={{ borderColor: 'var(--border)' }}
+      >
         <div>
-          <div className="flex items-center gap-2 text-white font-semibold text-xl">
-            <Bot className="w-5 h-5 text-emerald-400" />
+          <div className="flex items-center gap-2 font-semibold text-xl" style={{ color: 'var(--text-primary)' }}>
+            <Bot className="w-5 h-5" style={{ color: 'var(--accent)' }} />
             <span>Coordinated Multi-Agent AI Architecture</span>
-            <span className="text-xs font-mono uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+            <span
+              className="text-xs font-mono uppercase border px-2 py-0.5 rounded-full"
+              style={{
+                backgroundColor: 'var(--accent-muted)',
+                color: 'var(--accent)',
+                borderColor: 'var(--accent-border)',
+              }}
+            >
               6 Active Agents
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
             Autonomous specialized financial agents executing in isolated sandboxes with pre/post execution verification hooks
           </p>
         </div>
 
         <button
           onClick={onRefreshTasks}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs border border-slate-700/80 cursor-pointer self-start sm:self-auto"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs border cursor-pointer self-start sm:self-auto transition-colors hover:bg-[var(--bg-hover)]"
+          style={{
+            backgroundColor: 'var(--bg-card)',
+            borderColor: 'var(--border)',
+            color: 'var(--text-secondary)',
+          }}
         >
-          <RefreshCw className="w-3.5 h-3.5 text-slate-400" />
+          <RefreshCw className="w-3.5 h-3.5" style={{ color: 'var(--text-muted)' }} />
           <span>Refresh Agent Logs</span>
         </button>
       </div>
@@ -59,94 +74,138 @@ export const MultiAgentControlCenter: React.FC<Props> = ({
         {agents.map((agent) => (
           <div
             key={agent.agentType}
-            className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col justify-between hover:border-slate-700 transition-all"
+            className="rounded-2xl p-5 shadow-sm border flex flex-col justify-between transition-colors hover:border-[var(--border-hover)]"
+            style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
           >
             <div>
-              <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div
+                className="flex items-center justify-between pb-3 border-b"
+                style={{ borderColor: 'var(--border)' }}
+              >
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span className="text-[11px] font-mono text-emerald-400 font-bold">{agent.status}</span>
+                  <span
+                    className="w-2 h-2 rounded-full"
+                    style={{ backgroundColor: 'var(--success)' }}
+                  />
+                  <span className="text-[11px] font-mono font-bold" style={{ color: 'var(--accent)' }}>
+                    {agent.status}
+                  </span>
                 </div>
-                <span className="text-[10px] font-mono text-slate-500">Latency: {agent.averageLatencyMs}ms</span>
+                <span className="text-[10px] font-mono" style={{ color: 'var(--text-muted)' }}>
+                  Latency: {agent.averageLatencyMs}ms
+                </span>
               </div>
 
               <div className="mt-4">
-                <h3 className="text-base font-bold text-white tracking-tight">{agent.name}</h3>
-                <p className="text-xs text-slate-400 mt-1.5 leading-relaxed">{agent.role}</p>
+                <h3 className="text-base font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
+                  {agent.name}
+                </h3>
+                <p className="text-xs mt-1.5 leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                  {agent.role}
+                </p>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400 font-mono">
+              <div
+                className="mt-4 pt-3 border-t flex items-center justify-between text-xs font-mono"
+                style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
+              >
                 <span>Autonomous Ops</span>
-                <span className="font-bold text-white">{agent.tasksCompleted} Completed</span>
+                <span className="font-bold" style={{ color: 'var(--text-primary)' }}>
+                  {agent.tasksCompleted} Completed
+                </span>
               </div>
             </div>
 
-            <div className="mt-5 pt-3 border-t border-slate-800">
+            <div className="mt-5 pt-3 border-t" style={{ borderColor: 'var(--border)' }}>
               <button
                 onClick={() => handleRun(agent.agentType)}
                 disabled={isRunningAgent}
-                className="w-full py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50"
+                className="agent-trigger-button w-full py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50 border"
+                style={{
+                  backgroundColor: 'var(--accent-muted)',
+                  borderColor: 'var(--accent-border)',
+                  color: 'var(--text-primary)',
+                }}
               >
-                <Play className={`w-3.5 h-3.5 ${activeAgentRun === agent.agentType ? 'animate-spin text-emerald-400' : 'text-emerald-400'}`} />
-                <span>{activeAgentRun === agent.agentType ? 'Running Analysis...' : 'Trigger Agent Run'}</span>
+                <Play
+                  className={`w-3.5 h-3.5 ${activeAgentRun === agent.agentType ? 'animate-spin' : ''}`}
+                  style={{ color: 'var(--accent)' }}
+                />
+                <span>
+                  {activeAgentRun === agent.agentType ? 'Running Analysis...' : 'Trigger Agent Run'}
+                </span>
               </button>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Week 7 Engineering Architecture: Sandboxing & Hooks Activity Feed */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+      {/* Sandboxing & Hooks Activity Feed */}
+      <div
+        className="rounded-2xl p-6 shadow-sm border"
+        style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}
+      >
+        <div
+          className="flex items-center justify-between pb-4 border-b"
+          style={{ borderColor: 'var(--border)' }}
+        >
           <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-teal-400" />
-            <h3 className="font-semibold text-white text-base">
+            <Shield className="w-5 h-5" style={{ color: 'var(--accent)' }} />
+            <h3 className="font-semibold text-base" style={{ color: 'var(--text-primary)' }}>
               Week 7 Engineering Controls: Sandboxing &amp; Execution Hooks Feed
             </h3>
           </div>
-          <span className="text-xs font-mono text-slate-400">PostgreSQL Audit Trail</span>
+          <span className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>
+            PostgreSQL Audit Trail
+          </span>
         </div>
 
         <div className="mt-4 space-y-3">
           {tasks.slice(0, 6).map((task) => (
             <div
               key={task.id}
-              className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+              className="p-3.5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+              style={{ backgroundColor: 'var(--bg-secondary)', borderColor: 'var(--border)' }}
             >
               <div>
                 <div className="flex items-center gap-2 font-mono">
-                  <span className="text-emerald-400 font-semibold">{task.agentType}</span>
-                  <span className="text-slate-500">|</span>
-                  <span className="text-slate-300 font-semibold">{task.intent}</span>
+                  <span className="font-semibold" style={{ color: 'var(--accent)' }}>
+                    {task.agentType}
+                  </span>
+                  <span style={{ color: 'var(--text-muted)' }}>|</span>
+                  <span className="font-semibold" style={{ color: 'var(--text-secondary)' }}>
+                    {task.intent}
+                  </span>
                   <span
-                    className={`text-[10px] px-2 py-0.2 rounded-full border ${
+                    className="text-[10px] px-2 py-0.5 rounded-full border"
+                    style={
                       task.status === 'COMPLETED'
-                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                        ? { backgroundColor: 'var(--success-muted)', color: 'var(--success)', borderColor: 'var(--success-border)' }
                         : task.status === 'REQUIRES_APPROVAL'
-                        ? 'bg-amber-500/10 text-amber-400 border-amber-500/30'
-                        : 'bg-slate-800 text-slate-400 border-slate-700'
-                    }`}
+                        ? { backgroundColor: 'var(--warning-muted)', color: 'var(--warning)', borderColor: 'var(--warning-border)' }
+                        : { backgroundColor: 'var(--bg-card)', color: 'var(--text-muted)', borderColor: 'var(--border)' }
+                    }
                   >
                     {task.status}
                   </span>
                 </div>
-                <div className="text-slate-400 text-[11px] mt-1 font-mono truncate max-w-xl">
+                <div className="text-[11px] mt-1 font-mono truncate max-w-xl" style={{ color: 'var(--text-muted)' }}>
                   &ldquo;{task.userPrompt}&rdquo;
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 text-[11px] font-mono text-slate-400 flex-shrink-0">
+              <div className="flex items-center gap-3 text-[11px] font-mono flex-shrink-0" style={{ color: 'var(--text-muted)' }}>
                 <span className="flex items-center gap-1">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <CheckCircle2 className="w-3.5 h-3.5" style={{ color: 'var(--success)' }} />
                   <span>Sandboxed</span>
                 </span>
-                <span className="text-slate-500">{task.executionTimeMs}ms</span>
+                <span>{task.executionTimeMs}ms</span>
               </div>
             </div>
           ))}
 
           {tasks.length === 0 && (
-            <div className="py-6 text-center text-slate-500 font-mono text-xs">
+            <div className="py-6 text-center font-mono text-xs" style={{ color: 'var(--text-muted)' }}>
               No recent task logs. Ingest a transaction or query the AI assistant to view telemetry.
             </div>
           )}

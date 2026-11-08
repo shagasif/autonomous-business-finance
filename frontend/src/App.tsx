@@ -138,10 +138,7 @@ export function App() {
   }) => {
     setIsCreatingTx(true);
     try {
-      await ApiClient.createTransaction({
-        ...tx,
-        isSimulated: true,
-      });
+      await ApiClient.createTransaction({ ...tx, isSimulated: true });
       await fetchAllData(true);
     } catch (err: unknown) {
       alert(`Failed to ingest transaction: ${err instanceof Error ? err.message : 'Error'}`);
@@ -198,13 +195,29 @@ export function App() {
   const pendingApprovalsCount = tasks.filter((t) => t.status === 'REQUIRES_APPROVAL').length;
   const activeAnomaliesCount = anomalies.filter((a) => a.status === 'DETECTED').length;
 
+  const pageTitle: Record<ActiveTab, string> = {
+    overview: 'Executive Financial Overview',
+    agents: 'Multi-Agent Autonomous Command Center',
+    cashflow: 'Cash Flow Trajectory & Runway Health',
+    budgets: 'Departmental Budget Pacing & Utilization',
+    invoices: 'Accounts Receivable & Accounts Payable Ledger',
+    approvals: 'Human-in-the-Loop Governance & Approvals',
+    reports: 'Audited Financial Statements & GAAP Reports',
+  };
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-slate-950">
+    <div
+      className="min-h-screen flex flex-col font-sans"
+      style={{
+        backgroundColor: 'var(--bg-main)',
+        color: 'var(--text-primary)',
+      }}
+    >
       {/* Top Navbar */}
       <Navbar
         activeTab={activeTab}
         onTabChange={setActiveTab}
-        isBackendOnline={health !== null && error === null}
+        isBackendOnline={ApiClient.isLiveBackend && health?.status === 'ok'}
         pendingApprovalsCount={pendingApprovalsCount}
         activeAnomaliesCount={activeAnomaliesCount}
         onOpenAssistant={() => setIsAssistantOpen(true)}
@@ -212,21 +225,21 @@ export function App() {
 
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        {/* Error Notification Banner if Backend Offline */}
-        {error && (
-          <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-200 flex items-center justify-between gap-4">
+        {/* Error Notification Banner (Only if no data could be loaded) */}
+        {error && !overview && (
+          <div className="p-4 rounded-2xl bg-danger/10 border border-danger/30 text-danger flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <AlertCircle className="w-5 h-5 text-rose-400 flex-shrink-0" />
+              <AlertCircle className="w-5 h-5 text-danger flex-shrink-0" />
               <div>
-                <h3 className="font-semibold text-rose-300 text-xs">
+                <h3 className="font-semibold text-danger text-xs">
                   Backend API Communication Offline ({error.statusCode ? `HTTP ${error.statusCode}` : 'Disconnected'})
                 </h3>
-                <p className="text-[11px] text-rose-200/80 mt-0.5">{error.message}</p>
+                <p className="text-[11px] text-danger/70 mt-0.5">{error.message}</p>
               </div>
             </div>
             <button
               onClick={() => fetchAllData(true)}
-              className="px-3 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold cursor-pointer flex-shrink-0"
+              className="px-3 py-1 rounded-lg bg-danger hover:bg-danger/90 text-[var(--text-on-accent)] text-xs font-semibold cursor-pointer flex-shrink-0"
             >
               Retry
             </button>
@@ -236,16 +249,10 @@ export function App() {
         {/* Global Controls / Subheader */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2">
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-              {activeTab === 'overview' && 'Executive Financial Overview'}
-              {activeTab === 'agents' && 'Multi-Agent Autonomous Command Center'}
-              {activeTab === 'cashflow' && 'Cash Flow Trajectory & Runway Health'}
-              {activeTab === 'budgets' && 'Departmental Budget Pacing & Utilization'}
-              {activeTab === 'invoices' && 'Accounts Receivable & Accounts Payable Ledger'}
-              {activeTab === 'approvals' && 'Human-in-the-Loop Governance & Approvals'}
-              {activeTab === 'reports' && 'Audited Financial Statements & GAAP Reports'}
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight" style={{ color: 'var(--text-primary)' }}>
+              {pageTitle[activeTab]}
             </h1>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
               Apex Global Technologies Inc. • Multi-tenant Autonomous Finance Department
             </p>
           </div>
@@ -254,14 +261,23 @@ export function App() {
             <button
               onClick={() => fetchAllData(true)}
               disabled={isRefreshing || isLoading}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs border border-slate-700/80 cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs border cursor-pointer disabled:opacity-50 transition-colors hover:bg-[var(--bg-hover)]"
+              style={{
+                backgroundColor: 'var(--bg-card)',
+                borderColor: 'var(--border)',
+                color: 'var(--text-secondary)',
+              }}
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-emerald-400' : ''}`} />
+              <RefreshCw
+                className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin' : ''}`}
+                style={{ color: isRefreshing ? 'var(--accent)' : 'var(--text-muted)' }}
+              />
               <span>{isRefreshing ? 'Syncing...' : 'Sync Telemetry'}</span>
             </button>
             <button
               onClick={() => setIsAssistantOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs shadow-md shadow-emerald-500/20 cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold text-xs shadow-sm cursor-pointer"
+              style={{ background: 'var(--btn-primary-bg)', color: 'var(--btn-primary-text)' }}
             >
               <Bot className="w-3.5 h-3.5" />
               <span>Ask Assistant</span>
@@ -343,10 +359,20 @@ export function App() {
         )}
       </main>
 
-      {/* Footer Meta */}
-      <footer className="border-t border-slate-800 bg-slate-900/60 py-4 px-4 sm:px-8 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
+      {/* Footer */}
+      <footer
+        className="border-t py-4 px-4 sm:px-8 text-xs flex flex-col sm:flex-row items-center justify-between gap-2"
+        style={{
+          borderColor: 'var(--border)',
+          backgroundColor: 'var(--bg-card)',
+          color: 'var(--text-muted)',
+        }}
+      >
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span
+            className="w-2 h-2 rounded-full"
+            style={{ backgroundColor: 'var(--accent)' }}
+          />
           <span>Autonomous Business Finance System • Week 7 Engineering Framework</span>
         </div>
         <div className="font-mono text-[11px]">
