@@ -18,11 +18,7 @@ function getInitialTheme(): Theme {
   if (stored === 'light' || stored === 'dark') {
     return stored;
   }
-  // Fall back to OS preference
-  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    return 'dark';
-  }
-  return 'light';
+  return 'dark';
 }
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

@@ -5,10 +5,10 @@
 /*
  * Autonomous Finance - Brand Visual Identity
  *
- * Obsidian Black: #080B12
- * Radiant Champagne Gold: #D6AD72
- * Platinum Silver: #C4C7CC
- * Luminous Pearl: #F1EDE5
+ * Obsidian Black: #0B090D
+ * Soft Mauve: #D99ACB
+ * Platinum Silver: #C9C2CD
+ * Luminous Pearl: #F3EDF3
  *
  * Supporting surfaces use neutral tints of Obsidian Black and Luminous Pearl.
  */
@@ -77,38 +77,38 @@
 
 .dark {
   /* — Dark Mode — */
-  --bg-main: #080B12;
-  --bg-sidebar: #0A0D14;
-  --bg-card: #141923;
-  --bg-secondary: #1B202B;
-  --bg-modal: #141923;
-  --bg-input: #10141D;
-  --bg-hover: #202630;
-  --bg-overlay: rgba(8, 11, 18, 0.88);
+  --bg-main: #0b090d;
+  --bg-sidebar: #0a080b;
+  --bg-card: #171319;
+  --bg-secondary: #211a23;
+  --bg-modal: #171319;
+  --bg-input: #120f14;
+  --bg-hover: #2a202d;
+  --bg-overlay: rgba(8, 6, 10, 0.9);
 
-  --btn-primary-bg: #D6AD72;
-  --btn-primary-hover: #C49B65;
-  --btn-primary-text: #17130E;
+  --btn-primary-bg: linear-gradient(135deg, #e6b5db, #c985b7);
+  --btn-primary-hover: linear-gradient(135deg, #edc3e2, #d495c2);
+  --btn-primary-text: #1b111b;
 
-  --accent: #D6AD72;
-  --accent-hover: #C49B65;
-  --accent-light: #F1EDE5;
-  --accent-muted: rgba(214, 173, 114, 0.14);
-  --accent-border: rgba(214, 173, 114, 0.38);
-  --accent-highlight: linear-gradient(135deg, rgba(214, 173, 114, 0.2), rgba(214, 173, 114, 0.07));
-  --surface-edge: rgba(241, 237, 229, 0.045);
+  --accent: #d99acb;
+  --accent-hover: #edbce0;
+  --accent-light: #f3d9ee;
+  --accent-muted: rgba(217, 154, 203, 0.15);
+  --accent-border: rgba(217, 154, 203, 0.42);
+  --accent-highlight: linear-gradient(135deg, rgba(217, 154, 203, 0.28), rgba(217, 154, 203, 0.08));
+  --surface-edge: rgba(243, 237, 243, 0.055);
 
-  --secondary: #C4C7CC;
+  --secondary: #c9c2cd;
 
-  --border: #303642;
-  --border-card: #343A46;
-  --border-hover: #B68D58;
+  --border: #332a36;
+  --border-card: #3b3040;
+  --border-hover: #b879a8;
 
   /* Typography */
-  --text-primary: #F1EDE5;
-  --text-secondary: #C4C7CC;
-  --text-muted: #A6ABB4;
-  --text-on-accent: #17130E;
+  --text-primary: #f3edf3;
+  --text-secondary: #c9c2cd;
+  --text-muted: #a9a0ad;
+  --text-on-accent: #1b111b;
 
   --success: #72A86B;
   --success-muted: rgba(114, 168, 107, 0.18);
@@ -210,9 +210,9 @@ body {
 #root > .min-h-screen {
   animation: dashboard-fade-in 420ms ease-out both;
   background-image:
-    radial-gradient(ellipse 30rem 24rem at 4% 12%, rgba(214, 173, 114, 0.055), transparent 72%),
-    radial-gradient(ellipse 34rem 28rem at 96% 32%, rgba(196, 199, 204, 0.045), transparent 74%),
-    radial-gradient(ellipse 28rem 24rem at 52% 96%, rgba(214, 173, 114, 0.035), transparent 76%);
+    radial-gradient(ellipse 30rem 24rem at 4% 12%, rgba(217, 154, 203, 0.08), transparent 72%),
+    radial-gradient(ellipse 34rem 28rem at 96% 32%, rgba(201, 194, 205, 0.045), transparent 74%),
+    radial-gradient(ellipse 28rem 24rem at 52% 96%, rgba(217, 154, 203, 0.055), transparent 76%);
 }
 
 /* Soft edge lighting keeps dark cards distinct without a heavy shadow. */
